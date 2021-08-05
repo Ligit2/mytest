@@ -14,9 +14,6 @@
     <name>mytest</name>
     <description>Demo project for Spring Boot</description>
     <properties>
-        <configuration>
-            <defaultSchema>mytest</defaultSchema>
-        </configuration>
         <java.version>11</java.version>
     </properties>
     <dependencies>
