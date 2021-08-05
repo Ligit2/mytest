@@ -1,9 +1,7 @@
 name: Java CI with Maven
-  ​
 on:
   push:
     branches: [ master ]
-  ​
 jobs:
   build-deploy-run:
     runs-on: ubuntu-20.04
@@ -13,35 +11,33 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-  ​
-- name: Build package with Maven
-  run: mvn -B package --file pom.xml -Dmaven.test.skip=true
-  ​
-- name: Stop Test App API on server
-  uses: appleboy/ssh-action@master
-  with:
-    host: ${{ secrets.REMOTE_IP }}
-    username: ${{ secrets.REMOTE_USER }}
-    key: ${{ secrets.REMOTE_KEY }}
-    port: ${{ secrets.REMOTE_PORT }}
-    script: sudo systemctl stop mytest.service
-  ​
-- name: Copy file via ssh key
-  uses: appleboy/scp-action@master
-  with:
-    host: ${{ secrets.REMOTE_IP }}
-    username: ${{ secrets.REMOTE_USER }}
-    key: ${{ secrets.REMOTE_KEY }}
-    port: ${{ secrets.REMOTE_PORT }}
-    source: "target/mytest.jar"
-    strip_components: 1
-    target: "/home/ec2-user/app"
-  ​
-- name: Start Test APP API on server
-  uses: appleboy/ssh-action@master
-  with:
-    host: ${{ secrets.REMOTE_IP }}
-    username: ${{ secrets.REMOTE_USER }}
-    key: ${{ secrets.REMOTE_KEY }}
-    port: ${{ secrets.REMOTE_PORT }}
-    script: sudo systemctl start mytest.service
+      - name: Build package with Maven
+        run: mvn -B package --file pom.xml -Dmaven.test.skip=true
+
+      - name: Stop CREEA App API on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.REMOTE_KEY }}
+          port: ${{ secrets.REMOTE_PORT }}
+          script: sudo systemctl stop mytest.service
+      - name: Copy file via ssh key
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.REMOTE_KEY }}
+          port: ${{ secrets.REMOTE_PORT }}
+          source: "target/mytest.jar"
+          strip_components: 1
+          target: "/home/ec2-user/app"
+
+      - name: Start CREEA APP API on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.REMOTE_KEY }}
+          port: ${{ secrets.REMOTE_PORT }}
+          script: sudo systemctl start mytest.service
