@@ -8,5 +8,6 @@ public class Controller {
     @GetMapping("/cat")
     public String foo(){
         return "Hii Kitty";
+
     }
 }
